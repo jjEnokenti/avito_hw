@@ -8,7 +8,7 @@ class Ad(models.Model):
     price = models.IntegerField(null=False)
     description = models.CharField(max_length=1000)
     address = models.CharField(max_length=255)
-    is_published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=True)
 
 
 class Category(models.Model):
