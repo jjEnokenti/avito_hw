@@ -53,7 +53,7 @@ class CategoryDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         try:
-            category = self.get_object(*args, **kwargs)
+            category = self.get_object()
         except Category.DoesNotExist:
             return JsonResponse({'error': 'Not found'}, status=404)
 
@@ -68,7 +68,7 @@ class AdDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         try:
-            ad = self.get_object(*args, **kwargs)
+            ad = self.get_object()
         except Ad.DoesNotExist:
             return JsonResponse({'error': 'Not found'}, status=404)
 
