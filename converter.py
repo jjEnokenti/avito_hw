@@ -3,27 +3,15 @@ import json
 
 
 def csv_to_json(csv_path, json_path):
-    fieldnames = [
-        'id',
-        'name',
-        'author',
-        'price',
-        'description',
-        'address',
-        'is_published'
-    ]
-
     data = []
 
     with open(csv_path, 'r', encoding='UTF-8') as file:
-        cvs_reader = csv.DictReader(file, fieldnames=fieldnames)
+        cvs_reader = csv.DictReader(file)
 
         for row in cvs_reader:
-            if row['is_published']:
-                row['is_published'] = row['is_published'].lower()
             data.append(row)
 
-    write_json_file(data[1:], json_path)
+    write_json_file(data, json_path)
 
 
 def write_json_file(csv_data, json_path):

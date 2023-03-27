@@ -9,7 +9,8 @@ class Command(BaseCommand):
     fixtures_dir = 'fixtures'
     loaddata_command = 'loaddata'
     filenames = [
-        "ads.json",
+        'ads.json',
+        'categories.json'
     ]
 
     def handle(self, *args, **options):

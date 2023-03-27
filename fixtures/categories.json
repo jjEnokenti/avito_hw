@@ -1,47 +1,22 @@
 [
     {
         "id": "1",
-        "name": "Котики",
-        "author": null,
-        "price": null,
-        "description": null,
-        "address": null,
-        "is_published": null
+        "name": "Котики"
     },
     {
         "id": "2",
-        "name": "Песики",
-        "author": null,
-        "price": null,
-        "description": null,
-        "address": null,
-        "is_published": null
+        "name": "Песики"
     },
     {
         "id": "3",
-        "name": "Книги",
-        "author": null,
-        "price": null,
-        "description": null,
-        "address": null,
-        "is_published": null
+        "name": "Книги"
     },
     {
         "id": "4",
-        "name": "Растения",
-        "author": null,
-        "price": null,
-        "description": null,
-        "address": null,
-        "is_published": null
+        "name": "Растения"
     },
     {
         "id": "5",
-        "name": "Мебель и интерьер",
-        "author": null,
-        "price": null,
-        "description": null,
-        "address": null,
-        "is_published": null
+        "name": "Мебель и интерьер"
     }
 ]
