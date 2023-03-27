@@ -10,7 +10,6 @@ class Command(BaseCommand):
     loaddata_command = 'loaddata'
     filenames = [
         "ads.json",
-        "categories.json",
     ]
 
     def handle(self, *args, **options):
