@@ -15,5 +15,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for fixture_filename in self.filenames:
-            if os.path.exists(fixture_filename):
-                call_command(self.loaddata_command, os.path.join(self.fixtures_dir, fixture_filename))
+            call_command(self.loaddata_command, os.path.join(self.fixtures_dir, fixture_filename))
