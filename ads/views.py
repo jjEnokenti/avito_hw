@@ -5,24 +5,24 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView, DetailView
 
 from ads.models import Category, Ad
 
 
-class MainView(View):
-
-    def get(self, request):
-        return JsonResponse({"status": "ok"}, status=200)
+def index(request):
+    return JsonResponse({"status": "ok"}, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class CategoryView(View):
+class CategoryView(ListView):
+    model = Category
 
-    def get(self, request):
-        categories = Category.objects.all()
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
         response = []
 
-        for category in categories:
+        for category in self.object_list:
             response.append({
                 'id': category.id,
                 'name': category.name
@@ -50,13 +50,14 @@ class CategoryView(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class AdView(View):
+class AdView(ListView):
+    model = Ad
 
-    def get(self, request):
-        ads = Ad.objects.all()
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
         response = []
 
-        for ad in ads:
+        for ad in self.object_list:
             response.append({
                 'id': ad.id,
                 'name': ad.name,
@@ -97,12 +98,14 @@ class AdView(View):
         }, status=201)
 
 
-class CategoryDetailView(View):
+class CategoryDetailView(DetailView):
+    model = Category
 
-    def get(self, request, pk):
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
 
         try:
-            category = Category.objects.get(id=pk)
+            category = self.get_object()
         except Category.DoesNotExist:
             return JsonResponse({'error': 'Not found'}, status=404)
 
@@ -112,13 +115,13 @@ class CategoryDetailView(View):
         }, status=200)
 
 
-class AdDetailView(View):
+class AdDetailView(DetailView):
+    model = Ad
 
-    def get(self, request, pk):
-
-        try:
-            ad = Ad.objects.get(id=pk)
-        except Ad.DoesNotExist:
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+        ad = self.get_object()
+        if not ad:
             return JsonResponse({'error': 'Not found'}, status=404)
 
         return JsonResponse({
