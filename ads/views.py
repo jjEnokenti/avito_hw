@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView
 
 from ads.models import Category, Ad
 
@@ -15,14 +15,12 @@ def index(request):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class CategoryView(ListView):
-    model = Category
-
-    def get(self, request, *args, **kwargs):
-        super().get(request, *args, **kwargs)
+class CategoryView(View):
+    def get(self, request):
+        categories = Category.objects.all()
         response = []
 
-        for category in self.object_list:
+        for category in categories:
             response.append({
                 'id': category.id,
                 'name': category.name
@@ -44,22 +42,20 @@ class CategoryView(ListView):
         category.save()
 
         return JsonResponse({
-            'id': category.id,
+            'id': category.pk,
             'name': category.name
         }, status=201)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class AdView(ListView):
-    model = Ad
-
-    def get(self, request, *args, **kwargs):
-        super().get(request, *args, **kwargs)
+class AdView(View):
+    def get(self, request):
+        ads = Ad.objects.all()
         response = []
 
-        for ad in self.object_list:
+        for ad in ads:
             response.append({
-                'id': ad.id,
+                'id': ad.pk,
                 'name': ad.name,
                 'author': ad.author,
                 'price': ad.price,
@@ -88,7 +84,7 @@ class AdView(ListView):
         ad.save()
 
         return JsonResponse({
-            'id': ad.id,
+            'id': ad.pk,
             'name': ad.name,
             'author': ad.author,
             'price': ad.price,
@@ -103,11 +99,7 @@ class CategoryDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
-
-        try:
-            category = self.get_object()
-        except Category.DoesNotExist:
-            return JsonResponse({'error': 'Not found'}, status=404)
+        category = self.get_object()
 
         return JsonResponse({
             'id': category.id,
@@ -121,8 +113,6 @@ class AdDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
         ad = self.get_object()
-        if not ad:
-            return JsonResponse({'error': 'Not found'}, status=404)
 
         return JsonResponse({
             'id': ad.id,
