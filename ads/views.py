@@ -2,8 +2,9 @@ import json
 
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import DetailView
+from django.views.decorators.csrf import csrf_exempt
 
 from ads.models import Category, Ad
 
@@ -14,6 +15,7 @@ class MainView(View):
         return JsonResponse({"status": "ok"}, status=200)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CategoryView(View):
 
     def get(self, request):
@@ -47,6 +49,7 @@ class CategoryView(View):
         }, status=201)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class AdView(View):
 
     def get(self, request):
@@ -94,12 +97,12 @@ class AdView(View):
         }, status=201)
 
 
-class CategoryDetailView(DetailView):
-    model = Category
+class CategoryDetailView(View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, pk):
+
         try:
-            category = self.get_object()
+            category = Category.objects.get(id=pk)
         except Category.DoesNotExist:
             return JsonResponse({'error': 'Not found'}, status=404)
 
@@ -109,12 +112,12 @@ class CategoryDetailView(DetailView):
         }, status=200)
 
 
-class AdDetailView(DetailView):
-    model = Ad
+class AdDetailView(View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, pk):
+
         try:
-            ad = self.get_object()
+            ad = Ad.objects.get(id=pk)
         except Ad.DoesNotExist:
             return JsonResponse({'error': 'Not found'}, status=404)
 
