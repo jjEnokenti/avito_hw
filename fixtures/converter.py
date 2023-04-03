@@ -16,6 +16,25 @@ def csv_to_json(csv_path, json_path, model):
             else:
                 del row['Id']
 
+            if 'age' in row:
+                row['age'] = int(row['age'])
+
+            if 'location_id' in row:
+                row['location_id'] = int(row['location_id'])
+
+            if 'price' in row:
+                row['price'] = int(row['price'])
+
+            if 'author_id' in row:
+                row['author_id'] = int(row['author_id'])
+            if 'category_id' in row:
+                row['category_id'] = int(row['category_id'])
+
+            if 'lat' in row:
+                row['lat'] = float(row['lat'])
+            if 'lng' in row:
+                row['lng'] = float(row['lng'])
+
             if 'is_published' in row:
                 if row['is_published'] == 'TRUE':
                     row['is_published'] = True
@@ -35,5 +54,7 @@ def write_json_file(csv_data, json_path):
 
 
 if __name__ == '__main__':
-    csv_to_json('./fixtures/ads.csv', './fixtures/ads.json', 'ads.ad')
-    csv_to_json('./fixtures/categories.csv', './fixtures/categories.json', 'ads.category')
+    csv_to_json('./fixtures/ad.csv', './fixtures/ad.json', 'ads.ad')
+    csv_to_json('./fixtures/category.csv', './fixtures/category.json', 'ads.category')
+    csv_to_json('./fixtures/location.csv', './fixtures/location.json', 'ads.location')
+    csv_to_json('./fixtures/user.csv', './fixtures/user.json', 'ads.user')
