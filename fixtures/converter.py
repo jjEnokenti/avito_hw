@@ -9,31 +9,15 @@ def csv_to_json(csv_path, json_path, model):
         cvs_reader = csv.DictReader(file)
 
         for row in cvs_reader:
-            raw_data = {'model':  model, 'pk': int(row['id'] if 'id' in row else row['Id'])}
+            raw_data = {'model': model, 'pk': int(row['id'] if 'id' in row else row['Id'])}
 
             if 'id' in row:
                 del row['id']
             else:
                 del row['Id']
 
-            if 'age' in row:
-                row['age'] = int(row['age'])
-
-            if 'location_id' in row:
-                row['location_id'] = int(row['location_id'])
-
             if 'price' in row:
                 row['price'] = int(row['price'])
-
-            if 'author_id' in row:
-                row['author_id'] = int(row['author_id'])
-            if 'category_id' in row:
-                row['category_id'] = int(row['category_id'])
-
-            if 'lat' in row:
-                row['lat'] = float(row['lat'])
-            if 'lng' in row:
-                row['lng'] = float(row['lng'])
 
             if 'is_published' in row:
                 if row['is_published'] == 'TRUE':
