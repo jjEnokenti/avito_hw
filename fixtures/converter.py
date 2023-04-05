@@ -19,6 +19,10 @@ def csv_to_json(csv_path, json_path, model):
             if 'price' in row:
                 row['price'] = int(row['price'])
 
+            if 'location_id' in row:
+                row['locations'] = [row['location_id']]
+                del row['location_id']
+
             if 'is_published' in row:
                 if row['is_published'] == 'TRUE':
                     row['is_published'] = True
@@ -40,5 +44,5 @@ def write_json_file(csv_data, json_path):
 if __name__ == '__main__':
     csv_to_json('./fixtures/ad.csv', './fixtures/ad.json', 'ads.ad')
     csv_to_json('./fixtures/category.csv', './fixtures/category.json', 'ads.category')
-    csv_to_json('./fixtures/location.csv', './fixtures/location.json', 'ads.location')
-    csv_to_json('./fixtures/user.csv', './fixtures/user.json', 'ads.user')
+    csv_to_json('./fixtures/location.csv', './fixtures/location.json', 'users.location')
+    csv_to_json('./fixtures/user.csv', './fixtures/user.json', 'users.user')
