@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 from . import settings
+from ads.views import ad
 
 urlpatterns = [
+    path('', ad.index, name='home'),
     path('admin/', admin.site.urls),
-    path('', include('ads.urls'))
+    path('ad/', include('ads.urls.ad')),
+    path('cat/', include('ads.urls.category')),
 ]
 
 if settings.DEBUG:
