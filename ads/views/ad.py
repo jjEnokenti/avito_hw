@@ -1,13 +1,15 @@
 import json
 
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView
 
-from ads.models import Category, Ad
+from avito import settings
 from users.models import User
+from ads.models import Category, Ad
 
 
 def index(request):
@@ -19,10 +21,14 @@ class AdView(ListView):
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
-        response = []
 
-        for ad in self.object_list:
-            response.append({
+        paginator = Paginator(self.object_list, settings.TOTAL_PER_PAGE)
+        page_number = int(request.GET.get('page'))
+        pag_object = paginator.get_page(page_number)
+
+        items = []
+        for ad in pag_object:
+            items.append({
                 'id': ad.pk,
                 'name': ad.name,
                 'author_id': ad.author.id,
@@ -34,6 +40,12 @@ class AdView(ListView):
                 'category_id': ad.category.id,
                 'category': ad.category.name
             })
+
+        response = [{
+            'items': items,
+            'total': paginator.count,
+            'num_pages': paginator.num_pages
+        }]
 
         return JsonResponse(response, status=200, safe=False)
 
