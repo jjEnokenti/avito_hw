@@ -21,9 +21,9 @@ class AdView(ListView):
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
-
-        paginator = Paginator(self.object_list, settings.TOTAL_PER_PAGE)
-        page_number = int(request.GET.get('page'))
+        users = self.object_list.select_related('author').select_related('category').order_by('-price', 'name').all()
+        paginator = Paginator(users, settings.TOTAL_PER_PAGE)
+        page_number = request.GET.get('page')
         pag_object = paginator.get_page(page_number)
 
         items = []

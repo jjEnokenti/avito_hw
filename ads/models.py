@@ -16,7 +16,7 @@ class Category(models.Model):
 
 class Ad(models.Model):
     name = models.CharField(max_length=255, null=False)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='ads', on_delete=models.CASCADE)
     price = models.PositiveIntegerField(null=False)
     description = models.CharField(max_length=1000)
     image = models.ImageField(upload_to='pictures/%Y/%m/%d', null=True, blank=True)

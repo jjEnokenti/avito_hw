@@ -16,7 +16,7 @@ class CategoryView(ListView):
 
         response = []
 
-        for category in self.object_list:
+        for category in self.object_list.order_by('name'):
             response.append({
                 'id': category.id,
                 'name': category.name

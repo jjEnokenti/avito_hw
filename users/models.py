@@ -3,8 +3,8 @@ from django.db import models
 
 class Location(models.Model):
     name = models.CharField(max_length=155, unique=True)
-    lat = models.FloatField()
-    lng = models.DecimalField(max_digits=8, decimal_places=6)
+    lat = models.DecimalField(max_digits=8, decimal_places=6, null=True, default=0)
+    lng = models.DecimalField(max_digits=8, decimal_places=6, null=True, default=0)
 
     def __str__(self):
         return self.name
@@ -33,3 +33,4 @@ class User(models.Model):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        ordering = ['username']
