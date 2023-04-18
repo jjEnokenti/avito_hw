@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView
 
 from ads.models import Category
+from ads.serializers import CategorySerializer
 
 
 class CategoryView(ListView):
@@ -14,15 +15,14 @@ class CategoryView(ListView):
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
 
-        response = []
-
-        for category in self.object_list.order_by('name'):
-            response.append({
-                'id': category.id,
-                'name': category.name
-            })
-
-        return JsonResponse(response, status=200, safe=False)
+        return JsonResponse(
+            CategorySerializer(
+                self.object_list.order_by('name'),
+                many=True
+            ).data,
+            status=200,
+            safe=False
+        )
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -37,10 +37,7 @@ class CategoryCreateView(CreateView):
             name=category_data.get('name')
         )
 
-        return JsonResponse({
-            'id': category.id,
-            'name': category.name
-        }, status=201)
+        return JsonResponse(CategorySerializer(category).data, status=201)
 
 
 class CategoryDetailView(DetailView):
@@ -48,12 +45,8 @@ class CategoryDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
-        category = self.get_object()
 
-        return JsonResponse({
-            'id': category.id,
-            'name': category.name
-        }, status=200)
+        return JsonResponse(CategorySerializer(self.get_object()).data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -70,10 +63,7 @@ class CategoryUpdateView(UpdateView):
 
         self.object.save()
 
-        return JsonResponse({
-            'id': self.object.id,
-            'name': self.object.name
-        }, status=200)
+        return JsonResponse(CategorySerializer(self.object).data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')

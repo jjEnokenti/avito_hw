@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ads.models import Ad
+from ads.models import Ad, Category
 
 
 class AdSerializer(serializers.ModelSerializer):
@@ -19,3 +19,10 @@ class AdSerializer(serializers.ModelSerializer):
                   'is_published',
                   'category_id',
                   'category']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = '__all__'
