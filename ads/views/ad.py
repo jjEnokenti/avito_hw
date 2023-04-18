@@ -27,10 +27,8 @@ class AdView(ListView):
         page_number = request.GET.get('page')
         pag_object = paginator.get_page(page_number)
 
-        list(map(lambda ad: setattr(ad, 'author', ad.author if ad.author else None), pag_object))
         list(map(lambda ad: setattr(ad, 'author_id', ad.author.id if ad.author else None), pag_object))
         list(map(lambda ad: setattr(ad, 'category_id', ad.category.id if ad.category else None), pag_object))
-        list(map(lambda ad: setattr(ad, 'category', ad.category if ad.category else None), pag_object))
 
         response = [{
             'items': AdSerializer(pag_object, many=True).data,

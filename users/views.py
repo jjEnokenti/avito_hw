@@ -9,6 +9,12 @@ from django.views.generic import DetailView, CreateView, ListView, DeleteView, U
 
 from avito import settings
 from users.models import User, Location
+from users.serializers import (
+    UserListSerializer,
+    UserCreateSerializer,
+    UserDetailSerializer,
+    UserUpdateSerializer
+)
 
 
 class UserListView(ListView):
@@ -23,21 +29,10 @@ class UserListView(ListView):
         page_number = request.GET.get('page')
         pag_object = paginator.get_page(page_number)
 
-        items = []
-        for user in pag_object:
-            items.append({
-                'id': user.id,
-                'username': user.username,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'role': user.role,
-                'age': user.age,
-                'locations': list(map(str, user.locations.all())),
-                'total_ads': user.count_ads
-            })
+        list(map(lambda user: setattr(user, 'total_ads', user.count_ads if user.count_ads else None), pag_object))
 
         response = {
-            'items': items,
+            'items': UserListSerializer(pag_object, many=True).data,
             'total': paginator.count,
             'num_pages': paginator.num_pages
         }
@@ -50,17 +45,13 @@ class UserDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
+        setattr(
+            user,
+            'total_ads',
+            user.ads.filter(is_published=True).count() if user.ads.filter(is_published=True) else None
+        )
 
-        return JsonResponse({
-            'id': user.id,
-            'username': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'role': user.role,
-            'age': user.age,
-            'locations': list(map(str, user.locations.all())),
-            'total_ads': user.ads.filter(is_published=True).count()
-        })
+        return JsonResponse(UserDetailSerializer(user).data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -75,6 +66,7 @@ class UserCreateView(CreateView):
 
         user = User.objects.create(
             username=data.get('username'),
+            password=data.get('password'),
             first_name=data.get('first_name'),
             last_name=data.get('last_name'),
             role=data.get('role'),
@@ -89,15 +81,7 @@ class UserCreateView(CreateView):
 
         user.save()
 
-        return JsonResponse({
-            'id': user.id,
-            'username': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'role': user.role,
-            'age': user.age,
-            'locations': list(map(str, user.locations.all()))
-        })
+        return JsonResponse(UserCreateSerializer(user).data, status=201)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -130,15 +114,7 @@ class UserUpdateView(UpdateView):
 
         user.save()
 
-        return JsonResponse({
-            'id': user.id,
-            'username': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'role': user.role,
-            'age': user.age,
-            'locations': list(map(str, user.locations.all()))
-        })
+        return JsonResponse(UserUpdateSerializer(user).data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')

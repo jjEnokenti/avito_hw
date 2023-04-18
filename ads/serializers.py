@@ -4,8 +4,8 @@ from ads.models import Ad, Category
 
 
 class AdSerializer(serializers.ModelSerializer):
-    author = serializers.CharField(max_length=20)
-    category = serializers.CharField(max_length=50)
+    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    category = serializers.SlugRelatedField(slug_field='name', read_only=True)
 
     class Meta:
         model = Ad
