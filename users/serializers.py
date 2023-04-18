@@ -21,6 +21,7 @@ class UserDetailSerializer(UserListSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     locations = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -29,8 +30,18 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ['password']
+        fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    pass
+    locations = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='name'
+    )
+
+    class Meta:
+        model = User
+        fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}

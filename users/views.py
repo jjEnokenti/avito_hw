@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView
 
 from avito import settings
-from users.models import User, Location
+from users.models import User
 from users.serializers import (
     UserListSerializer,
     UserCreateSerializer,
@@ -60,28 +60,14 @@ class UserCreateView(CreateView):
     fields = ['username', 'first_name', 'password', 'last_name', 'role', 'age', 'locations']
 
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
+        user = UserCreateSerializer(data=json.loads(request.body))
 
-        locations = data.get('locations')
+        if user.is_valid():
+            user.save()
+        else:
+            return JsonResponse(user.errors)
 
-        user = User.objects.create(
-            username=data.get('username'),
-            password=data.get('password'),
-            first_name=data.get('first_name'),
-            last_name=data.get('last_name'),
-            role=data.get('role'),
-            age=data.get('age')
-        )
-
-        for location in locations:
-            loc, created = Location.objects.get_or_create(
-                name=location
-            )
-            user.locations.add(loc)
-
-        user.save()
-
-        return JsonResponse(UserCreateSerializer(user).data, status=201)
+        return JsonResponse(user.data, status=201)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -90,31 +76,14 @@ class UserUpdateView(UpdateView):
     fields = ['username']
 
     def patch(self, request, *args, **kwargs):
-        data = json.loads(request.body)
+        user = UserUpdateSerializer(self.get_object(), data=json.loads(request.body), partial=True)
 
-        user = self.get_object()
-        locations = data.get('locations')
+        if user.is_valid():
+            user.save()
+        else:
+            return JsonResponse(user.errors)
 
-        if 'password' in data:
-            user.password = data.get('password')
-        if 'first_name' in data:
-            user.first_name = data.get('first_name')
-        if 'last_name' in data:
-            user.last_name = data.get('last_name')
-        if 'role' in data:
-            user.role = data.get('role')
-        if 'age' in data:
-            user.age = data.get('age')
-        if 'locations' in data:
-            for location in locations:
-                loc, created = Location.objects.get_or_create(
-                    name=location
-                )
-                user.locations.add(loc)
-
-        user.save()
-
-        return JsonResponse(UserUpdateSerializer(user).data, status=200)
+        return JsonResponse(user.data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
