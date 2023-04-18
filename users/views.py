@@ -11,7 +11,7 @@ from avito import settings
 from users.models import User, Location
 
 
-class ListUserView(ListView):
+class UserListView(ListView):
     model = User
 
     def get(self, request, *args, **kwargs):
@@ -45,7 +45,7 @@ class ListUserView(ListView):
         return JsonResponse(response, safe=False)
 
 
-class DetailUserView(DetailView):
+class UserDetailView(DetailView):
     model = User
 
     def get(self, request, *args, **kwargs):
@@ -64,7 +64,7 @@ class DetailUserView(DetailView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class CreateUserView(CreateView):
+class UserCreateView(CreateView):
     model = User
     fields = ['username', 'first_name', 'password', 'last_name', 'role', 'age', 'locations']
 
@@ -101,7 +101,7 @@ class CreateUserView(CreateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class UpdateUserView(UpdateView):
+class UserUpdateView(UpdateView):
     model = User
     fields = ['username']
 
@@ -142,7 +142,7 @@ class UpdateUserView(UpdateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class DeleteUserView(DeleteView):
+class UserDeleteView(DeleteView):
     model = User
     success_url = '/'
 

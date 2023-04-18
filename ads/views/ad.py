@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView
 
+from ads.serializers import AdSerializer
 from avito import settings
 from users.models import User
 from ads.models import Category, Ad
@@ -26,23 +27,28 @@ class AdView(ListView):
         page_number = request.GET.get('page')
         pag_object = paginator.get_page(page_number)
 
+        list(map(lambda ad: setattr(ad, 'author', ad.author if ad.author else None), pag_object))
+        list(map(lambda ad: setattr(ad, 'author_id', ad.author.id if ad.author else None), pag_object))
+        list(map(lambda ad: setattr(ad, 'category_id', ad.category.id if ad.category else None), pag_object))
+        list(map(lambda ad: setattr(ad, 'category', ad.category if ad.category else None), pag_object))
+
         items = []
-        for ad in pag_object:
-            items.append({
-                'id': ad.pk,
-                'name': ad.name,
-                'author_id': ad.author.id,
-                'author': ad.author.username,
-                'price': ad.price,
-                'description': ad.description,
-                'image': ad.image.url,
-                'is_published': ad.is_published,
-                'category_id': ad.category.id,
-                'category': ad.category.name
-            })
+        # for ad in pag_object:
+        #     items.append({
+        #         'id': ad.pk,
+        #         'name': ad.name,
+        #         'author_id': ad.author.id,
+        #         'author': ad.author.username,
+        #         'price': ad.price,
+        #         'description': ad.description,
+        #         'image': ad.image.url,
+        #         'is_published': ad.is_published,
+        #         'category_id': ad.category.id,
+        #         'category': ad.category.name
+        #     })
 
         response = [{
-            'items': items,
+            'items': AdSerializer(pag_object, many=True).data,
             'total': paginator.count,
             'num_pages': paginator.num_pages
         }]
@@ -79,18 +85,7 @@ class AdCreateView(CreateView):
                 'category': category
             })
 
-        return JsonResponse({
-            'id': ad.pk,
-            'name': ad.name,
-            'author_id': ad.author.id,
-            'author': ad.author.username,
-            'price': ad.price,
-            'description': ad.description,
-            'image': ad.image.url,
-            'is_published': ad.is_published,
-            'category_id': ad.category.id,
-            'category': ad.category.name
-        }, status=201)
+        return JsonResponse(AdSerializer(ad).data, status=201)
 
 
 class AdDetailView(DetailView):
@@ -100,18 +95,7 @@ class AdDetailView(DetailView):
         super().get(request, *args, **kwargs)
         ad = self.get_object()
 
-        return JsonResponse({
-            'id': ad.pk,
-            'name': ad.name,
-            'author_id': ad.author.id,
-            'author': ad.author.username,
-            'price': ad.price,
-            'description': ad.description,
-            'image': ad.image.url,
-            'is_published': ad.is_published,
-            'category_id': ad.category.id,
-            'category': ad.category.name
-        }, status=200)
+        return JsonResponse(AdSerializer(ad).data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -139,22 +123,11 @@ class AdUpdateView(UpdateView):
 
         ad.save()
 
-        return JsonResponse({
-            'id': ad.pk,
-            'name': ad.name,
-            'author_id': ad.author.id,
-            'author': ad.author.username,
-            'price': ad.price,
-            'description': ad.description,
-            'image': ad.image.url,
-            'is_published': ad.is_published,
-            'category_id': ad.category.id,
-            'category': ad.category.name
-        }, status=200)
+        return JsonResponse(AdSerializer(ad).data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class UploadImageView(UpdateView):
+class AdUploadImageView(UpdateView):
     model = Ad
     fields = ['image']
 
@@ -167,18 +140,7 @@ class UploadImageView(UpdateView):
 
         ad.save()
 
-        return JsonResponse({
-            'id': ad.pk,
-            'name': ad.name,
-            'author_id': ad.author.id,
-            'author': ad.author.username,
-            'price': ad.price,
-            'description': ad.description,
-            'image': ad.image.url,
-            'is_published': ad.is_published,
-            'category_id': ad.category.id,
-            'category': ad.category.name
-        })
+        return JsonResponse(AdSerializer(ad).data, status=200)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
