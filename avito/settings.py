@@ -125,8 +125,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-TOTAL_PER_PAGE = 10
-
 LOGGING = {
     'version': 1,
     'filters': {
@@ -147,4 +145,10 @@ LOGGING = {
             'handlers': ['console'],
         }
     }
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
