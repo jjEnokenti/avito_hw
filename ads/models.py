@@ -27,5 +27,13 @@ class Ad(models.Model):
         verbose_name = 'Объявление'
         verbose_name_plural = 'Объявления'
 
+    @property
+    def category_name(self):
+        return self.category.name if self.category else None
+
+    @property
+    def author_name(self):
+        return self.author.username if self.author else None
+
     def __str__(self):
         return self.name
