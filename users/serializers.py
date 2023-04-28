@@ -3,8 +3,14 @@ from rest_framework import serializers
 from users.models import User, Location
 
 
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = '__all__'
+
+
 class UserListSerializer(serializers.ModelSerializer):
-    total_ads = serializers.IntegerField()
+    total_ads = serializers.IntegerField(required=False)
     locations = serializers.SlugRelatedField(
         many=True,
         read_only=True,
@@ -64,7 +70,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'username': {'read_only': True},
-            'password': {'write_only': True}
+            'password': {'required': False, 'write_only': True}
         }
 
     def is_valid(self, *, raise_exception=False):
