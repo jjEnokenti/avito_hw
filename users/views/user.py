@@ -21,14 +21,17 @@ class UserViewSet(viewsets.ModelViewSet):
 
         response = self.get_paginated_response(self.paginate_queryset(serializer.data))
         response.data['items'] = response.data.pop('results')
+        response.data['total'] = response.data.pop('count')
+        response.data['num_pages'] = response.data['total'] // self.paginator.page_size
 
         return Response(response.data, status=status.HTTP_200_OK)
 
-    def retrieve(self, request, pk):
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs['pk']
         self.queryset = User.objects.filter(id=pk).prefetch_related('locations').annotate(
             total_ads=Count('ads', filter=Q(ads__is_published=True))).order_by('username')
 
-        return super().retrieve(request, pk)
+        return super().retrieve(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         self.serializer_class = UserCreateSerializer

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ads.models import Ad
 
 
-class AdSerializer(serializers.ModelSerializer):
+class AdListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = (
@@ -20,7 +20,7 @@ class AdSerializer(serializers.ModelSerializer):
         )
 
 
-class AdRetrieveSerializer(serializers.ModelSerializer):
+class AdRetrieveSerializer(AdListSerializer):
     pass
 
 
@@ -34,13 +34,11 @@ class AdCreateSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'author',
-            'author_name',
             'price',
             'description',
             'image',
             'is_published',
             'category',
-            'category_name',
         )
 
 
@@ -54,13 +52,11 @@ class AdUpdateSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'author',
-            'author_name',
             'price',
             'description',
             'image',
             'is_published',
             'category',
-            'category_name',
         )
 
 

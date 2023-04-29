@@ -1,13 +1,19 @@
 from django.db.models import Q
 from django.http import JsonResponse
-from rest_framework import viewsets, status
+from rest_framework.generics import (
+    ListAPIView,
+    CreateAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+    DestroyAPIView
+)
 from rest_framework.response import Response
 
 from ads.models import Ad
 from ads.serializers.ad import (
     AdCreateSerializer,
-    AdSerializer,
-    AdUpdateSerializer
+    AdUpdateSerializer,
+    AdListSerializer, AdDestroySerializer, AdRetrieveSerializer
 )
 
 
@@ -15,9 +21,9 @@ def index(request):
     return JsonResponse({"status": "ok"}, status=200)
 
 
-class AdViewSet(viewsets.ModelViewSet):
+class AdView(ListAPIView):
     queryset = Ad.objects.all()
-    serializer_class = AdSerializer
+    serializer_class = AdListSerializer
 
     def list(self, request, *args, **kwargs):
         cat = request.query_params.get('cat')
@@ -30,9 +36,9 @@ class AdViewSet(viewsets.ModelViewSet):
 
         if cat:
             if filters is None:
-                filters = Q(category=cat)
+                filters = Q(category__exact=cat)
             else:
-                filters &= Q(category=cat)
+                filters &= Q(category__exact=cat)
         if text:
             if filters is None:
                 filters = Q(name__icontains=text)
@@ -67,20 +73,32 @@ class AdViewSet(viewsets.ModelViewSet):
             response = self.get_paginated_response(self.paginate_queryset(serializer.data))
 
         response.data['items'] = response.data.pop('results')
+        response.data['total'] = response.data.pop('count')
+        response.data['num_pages'] = response.data['total'] // self.paginator.page_size
 
         return Response(response.data)
 
-    def create(self, request, *args, **kwargs):
-        self.serializer_class = AdCreateSerializer
 
-        return super().create(request, *args, **kwargs)
+class AdCreateView(CreateAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdCreateSerializer
 
-    def update(self, request, *args, **kwargs):
-        self.serializer_class = AdUpdateSerializer
 
-        return super().update(request, *args, **kwargs)
+class AdRetrieveView(RetrieveAPIView):
+    queryset = Ad.objects.select_related('author').select_related('category').all()
+    serializer_class = AdRetrieveSerializer
 
-    def partial_update(self, request, *args, **kwargs):
-        self.serializer_class = AdUpdateSerializer
 
-        return super().partial_update(request, *args, **kwargs)
+class AdUpdateView(UpdateAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdUpdateSerializer
+
+
+class AdUploadImageView(UpdateAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdUpdateSerializer
+
+
+class AdDeleteView(DestroyAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdDestroySerializer
