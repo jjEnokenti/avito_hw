@@ -31,19 +31,17 @@ class UserViewSet(viewsets.ModelViewSet):
         return super().retrieve(request, pk)
 
     def create(self, request, *args, **kwargs):
-        serializer = UserCreateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self.serializer_class = UserCreateSerializer
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        self.serializer_class = UserUpdateSerializer(data=request.data)
+        self.serializer_class = UserUpdateSerializer
 
-        return super().partial_update(request, *args, **kwargs)
+        return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
-        self.serializer_class = UserUpdateSerializer(data=request.data, partial=True)
+        self.serializer_class = UserUpdateSerializer
 
         return super().partial_update(request, *args, **kwargs)
 
