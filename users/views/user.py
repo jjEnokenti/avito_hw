@@ -16,15 +16,16 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserListSerializer
 
     def list(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_queryset().prefetch_related('locations').annotate(
-            total_ads=Count('ads', filter=Q(ads__is_published=True))).order_by('username'), many=True)
+        self.queryset = self.get_queryset().prefetch_related('locations').annotate(
+            total_ads=Count('ads', filter=Q(ads__is_published=True))).order_by('username')
 
-        response = self.get_paginated_response(self.paginate_queryset(serializer.data))
+        response = super().list(request, *args, **kwargs)
+
         response.data['items'] = response.data.pop('results')
         response.data['total'] = response.data.pop('count')
         response.data['num_pages'] = response.data['total'] // self.paginator.page_size
 
-        return Response(response.data, status=status.HTTP_200_OK)
+        return Response(response.data)
 
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs['pk']
