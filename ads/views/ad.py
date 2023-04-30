@@ -1,20 +1,14 @@
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.generics import (
-    ListAPIView,
-    CreateAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-    DestroyAPIView
-)
-from rest_framework.response import Response
+from rest_framework import viewsets
 
 from ads.filter_class import AdFilter
 from ads.models import Ad
 from ads.serializers.ad import (
+    AdSerializer,
     AdCreateSerializer,
     AdUpdateSerializer,
-    AdListSerializer, AdDestroySerializer, AdRetrieveSerializer
+    AdDestroySerializer,
 )
 
 
@@ -22,45 +16,32 @@ def index(request):
     return JsonResponse({"status": "ok"}, status=200)
 
 
-class AdView(ListAPIView):
-    queryset = Ad.objects.select_related(
-        'author').select_related(
-        'category').order_by(
-        '-price', 'name')
-    serializer_class = AdListSerializer
+class AdViewSet(viewsets.ModelViewSet):
+    queryset = Ad.objects.all()
+    default_serializer = AdSerializer
+    serializers = {
+        "update": AdUpdateSerializer,
+        "partial_update": AdUpdateSerializer,
+        "create": AdCreateSerializer,
+        "destroy": AdDestroySerializer
+    }
     filter_backends = [DjangoFilterBackend]
     filterset_class = AdFilter
 
+    def get_serializer_class(self):
+        return self.serializers.get(self.action, self.default_serializer)
+
     def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
+        self.queryset = self.get_queryset().select_related(
+            'author').select_related(
+            'category').order_by(
+            '-price', 'name')
 
-        response.data['items'] = response.data.pop('results')
-        response.data['total'] = response.data.pop('count')
-        response.data['num_pages'] = response.data['total'] // self.paginator.page_size
+        return super().list(request, *args, **kwargs)
 
-        return Response(response.data)
+    def retrieve(self, request, *args, **kwargs):
+        self.queryset = self.get_queryset().select_related(
+            'author').select_related(
+            'category').all()
 
-
-class AdCreateView(CreateAPIView):
-    queryset = Ad.objects.all()
-    serializer_class = AdCreateSerializer
-
-
-class AdRetrieveView(RetrieveAPIView):
-    queryset = Ad.objects.select_related('author').select_related('category').all()
-    serializer_class = AdRetrieveSerializer
-
-
-class AdUpdateView(UpdateAPIView):
-    queryset = Ad.objects.all()
-    serializer_class = AdUpdateSerializer
-
-
-class AdUploadImageView(UpdateAPIView):
-    queryset = Ad.objects.all()
-    serializer_class = AdUpdateSerializer
-
-
-class AdDeleteView(DestroyAPIView):
-    queryset = Ad.objects.all()
-    serializer_class = AdDestroySerializer
+        return super().retrieve(request, *args, **kwargs)

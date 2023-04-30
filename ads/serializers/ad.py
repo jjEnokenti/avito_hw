@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ads.models import Ad
 
 
-class AdListSerializer(serializers.ModelSerializer):
+class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = (
@@ -18,10 +18,6 @@ class AdListSerializer(serializers.ModelSerializer):
             'category_id',
             'category_name',
         )
-
-
-class AdRetrieveSerializer(AdListSerializer):
-    pass
 
 
 class AdCreateSerializer(serializers.ModelSerializer):
@@ -42,22 +38,8 @@ class AdCreateSerializer(serializers.ModelSerializer):
         )
 
 
-class AdUpdateSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(required=False)
+class AdUpdateSerializer(AdCreateSerializer):
     id = serializers.IntegerField(read_only=True)
-
-    class Meta:
-        model = Ad
-        fields = (
-            'id',
-            'name',
-            'author',
-            'price',
-            'description',
-            'image',
-            'is_published',
-            'category',
-        )
 
 
 class AdDestroySerializer(serializers.ModelSerializer):
