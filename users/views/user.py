@@ -1,6 +1,5 @@
 from django.db.models import Count, Q
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework import viewsets
 
 from users.models import User
 from users.serializers import (
@@ -13,43 +12,26 @@ from users.serializers import (
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserListSerializer
+    default_serializer = UserListSerializer
+    serializers = {
+        "update": UserUpdateSerializer,
+        "partial_update": UserUpdateSerializer,
+        "create": UserCreateSerializer,
+        "destroy": UserDestroySerializer
+    }
+
+    def get_serializer_class(self):
+        return self.serializers.get(self.action, self.default_serializer)
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.get_queryset().prefetch_related('locations').annotate(
             total_ads=Count('ads', filter=Q(ads__is_published=True))).order_by('username')
 
-        response = super().list(request, *args, **kwargs)
-
-        response.data['items'] = response.data.pop('results')
-        response.data['total'] = response.data.pop('count')
-        response.data['num_pages'] = response.data['total'] // self.paginator.page_size
-
-        return Response(response.data)
+        return super().list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs['pk']
         self.queryset = User.objects.filter(id=pk).prefetch_related('locations').annotate(
-            total_ads=Count('ads', filter=Q(ads__is_published=True))).order_by('username')
+            total_ads=Count('ads', filter=Q(ads__is_published=True)))
 
         return super().retrieve(request, *args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
-        self.serializer_class = UserCreateSerializer
-
-        return super().create(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        self.serializer_class = UserUpdateSerializer
-
-        return super().update(request, *args, **kwargs)
-
-    def partial_update(self, request, *args, **kwargs):
-        self.serializer_class = UserUpdateSerializer
-
-        return super().partial_update(request, *args, **kwargs)
-
-    def destroy(self, request, *args, **kwargs):
-        self.serializer_class = UserDestroySerializer
-
-        return super().destroy(request, *args, **kwargs)
