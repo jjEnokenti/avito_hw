@@ -12,4 +12,4 @@ class AdFilter(f.FilterSet):
 
     class Meta:
         model = Ad
-        fields = ['cat', 'location', 'price_from', 'price_to']
+        fields = ['cat', 'location', 'price_from', 'price_to', 'text']
