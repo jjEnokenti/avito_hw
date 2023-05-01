@@ -1,22 +1,27 @@
 from rest_framework import serializers
 
 from ads.models import Ad
+from users.serializers import UserAdSerializer
 
 
 class AdSerializer(serializers.ModelSerializer):
+    author = UserAdSerializer()
+    category = serializers.SlugRelatedField(
+        slug_field='name',
+        read_only=True
+    )
+
     class Meta:
         model = Ad
         fields = (
             'id',
             'name',
-            'author_id',
-            'author_name',
+            'author',
             'price',
             'description',
             'image',
             'is_published',
-            'category_id',
-            'category_name',
+            'category',
         )
 
 

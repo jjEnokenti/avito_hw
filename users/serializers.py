@@ -22,10 +22,6 @@ class UserListSerializer(serializers.ModelSerializer):
         exclude = ('password',)
 
 
-class UserRetrieveSerializer(UserListSerializer):
-    pass
-
-
 class UserCreateSerializer(serializers.ModelSerializer):
     locations = serializers.SlugRelatedField(
         many=True,
@@ -93,3 +89,9 @@ class UserDestroySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id',)
+
+
+class UserAdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name']
