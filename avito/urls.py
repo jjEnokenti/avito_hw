@@ -28,6 +28,7 @@ urlpatterns = [
     path('cat/', include('ads.urls.category')),
     path('user/', include('users.urls.user')),
     path('location/', include('users.urls.location')),
+    path('auth/', include('authentication.urls')),
 ]
 
 if settings.DEBUG:
