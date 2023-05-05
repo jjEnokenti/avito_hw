@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
+from ads.custom_permissions import CanEditOrDelete
 from ads.filter_class import AdFilter
 from ads.models import Ad
 from ads.serializers.ad import (
@@ -26,9 +27,10 @@ class AdViewSet(viewsets.ModelViewSet):
         "create": AdCreateSerializer,
         "destroy": AdDestroySerializer
     }
-    default_permission = [IsAuthenticated]
+    default_permission = [IsAuthenticated, CanEditOrDelete]
     permissions = {
-        'list': []
+        'list': [],
+        "create": [IsAuthenticated]
     }
     filter_backends = [DjangoFilterBackend]
     filterset_class = AdFilter
