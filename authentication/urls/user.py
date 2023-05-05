@@ -8,8 +8,8 @@ router = routers.SimpleRouter()
 router.register('', user.UserViewSet)
 
 urlpatterns = [
-    path('token/', TokenObtainPairView.as_view()),
-    path('refresh/', TokenRefreshView.as_view()),
+    path('login/', TokenObtainPairView.as_view()),
+    path('token/', TokenRefreshView.as_view()),
     path('register/', user.CreateUserView.as_view()),
 ]
 
