@@ -1,18 +1,23 @@
 from django.db.models import Count, Q
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 
-from users.models import User
-from users.serializers import (
-    UserListSerializer,
+from ..models.user import User
+from ..serializers.user import (
+    UserBaseSerializer,
     UserCreateSerializer,
     UserUpdateSerializer,
     UserDestroySerializer
 )
 
 
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCreateSerializer
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    default_serializer = UserListSerializer
+    default_serializer = UserBaseSerializer
     serializers = {
         "update": UserUpdateSerializer,
         "partial_update": UserUpdateSerializer,

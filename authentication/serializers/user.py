@@ -1,15 +1,10 @@
 from rest_framework import serializers
 
-from users.models import User, Location
+from ..models.location import Location
+from ..models.user import User
 
 
-class LocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Location
-        fields = '__all__'
-
-
-class UserListSerializer(serializers.ModelSerializer):
+class UserBaseSerializer(serializers.ModelSerializer):
     total_ads = serializers.IntegerField(required=False)
     locations = serializers.SlugRelatedField(
         many=True,
@@ -75,6 +70,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def save(self):
         user = super().save()
+
         if self._locations:
             for location in self._locations:
                 loc_obj, _ = Location.objects.get_or_create(name=location)

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
-from users.models import Location
-from users.serializers import LocationSerializer
+from ..models.location import Location
+from ..serializers.location import LocationSerializer
 
 
 class LocationViewSet(viewsets.ModelViewSet):
