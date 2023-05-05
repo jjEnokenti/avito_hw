@@ -4,6 +4,12 @@ from ads.models import Ad
 from authentication.serializers.user import UserAdSerializer
 
 
+class AdSelectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = '__all__'
+
+
 class AdSerializer(serializers.ModelSerializer):
     author = UserAdSerializer()
     category = serializers.SlugRelatedField(
