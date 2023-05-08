@@ -21,13 +21,13 @@ class ListSelectionView(generics.ListAPIView):
 class RetrieveSelectionView(generics.RetrieveAPIView):
     queryset = Selection.objects.all()
     serializer_class = RetrieveSelectionSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class CreateSelectionView(generics.CreateAPIView):
     queryset = Selection
     serializer_class = CreateSelectionSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class UpdateSelectionView(generics.UpdateAPIView):

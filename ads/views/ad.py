@@ -27,11 +27,13 @@ class AdViewSet(viewsets.ModelViewSet):
         "create": AdCreateSerializer,
         "destroy": AdDestroySerializer
     }
+
     default_permission = [IsAuthenticated, CanEditOrDelete]
     permissions = {
         'list': [],
         "create": [IsAuthenticated]
     }
+
     filter_backends = [DjangoFilterBackend]
     filterset_class = AdFilter
 

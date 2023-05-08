@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from ads.models import Ad
-from authentication.serializers.user import UserAdSerializer
+from users.serializers.user import UserAdSerializer
 
 
 class AdSelectionSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from authentication.views import location
+from users.views import location
 
 router = routers.SimpleRouter()
 router.register('', location.LocationViewSet)

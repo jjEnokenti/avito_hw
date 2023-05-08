@@ -1,7 +1,7 @@
 from django.db import models
 
 from ads.models import Ad
-from authentication.models.user import User
+from users.models.user import User
 
 
 class Selection(models.Model):

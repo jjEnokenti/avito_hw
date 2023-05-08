@@ -26,8 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ad/', include('ads.urls.ad')),
     path('cat/', include('ads.urls.category')),
-    path('user/', include('authentication.urls.user')),
-    path('location/', include('authentication.urls.location')),
+    path('user/', include('users.urls.user')),
+    path('location/', include('users.urls.location')),
     path('selection/', include('selection.urls')),
 ]
 

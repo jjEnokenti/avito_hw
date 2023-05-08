@@ -44,5 +44,5 @@ def write_json_file(csv_data, json_path):
 if __name__ == '__main__':
     csv_to_json('./fixtures/ad.csv', './fixtures/ad.json', 'ads.ad')
     csv_to_json('./fixtures/category.csv', './fixtures/category.json', 'ads.category')
-    csv_to_json('./fixtures/location.csv', './fixtures/location.json', 'authentication.location')
-    csv_to_json('./fixtures/user.csv', './fixtures/user.json', 'authentication.user')
+    csv_to_json('./fixtures/location.csv', './fixtures/location.json', 'users.location')
+    csv_to_json('./fixtures/user.csv', './fixtures/user.json', 'users.user')
