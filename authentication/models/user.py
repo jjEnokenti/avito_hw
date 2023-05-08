@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 from .location import Location
 
@@ -23,7 +23,7 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
         ordering = ['username']
 
-    def save(self, *args, **kwargs):
-        self.set_password(self.password)
-
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.set_password(self.password)
+    #
+    #     return super().save()
