@@ -1,6 +1,6 @@
 [
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 1,
         "fields": {
             "first_name": "Павел",
@@ -15,7 +15,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 2,
         "fields": {
             "first_name": "Альбина",
@@ -30,7 +30,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 3,
         "fields": {
             "first_name": "Иван",
@@ -45,7 +45,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 4,
         "fields": {
             "first_name": "Марина",
@@ -60,7 +60,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 5,
         "fields": {
             "first_name": "Галина",
@@ -75,7 +75,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 6,
         "fields": {
             "first_name": "Петр",
@@ -90,7 +90,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 7,
         "fields": {
             "first_name": "Никита",
@@ -105,7 +105,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 8,
         "fields": {
             "first_name": "Виолетта",
@@ -120,7 +120,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 9,
         "fields": {
             "first_name": "Гульнара",
@@ -135,7 +135,7 @@
         }
     },
     {
-        "model": "authentication.user",
+        "model": "users.user",
         "pk": 10,
         "fields": {
             "first_name": "Борис",

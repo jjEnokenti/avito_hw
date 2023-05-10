@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from selection.custom_permissions import IsOwner
+from selection.custom_permissions import IsOwnerOrStaff
 from selection.models import Selection
 from selection.serializers import (
     ListSelectionSerializer,
@@ -33,10 +33,10 @@ class CreateSelectionView(generics.CreateAPIView):
 class UpdateSelectionView(generics.UpdateAPIView):
     queryset = Selection
     serializer_class = UpdateSelectionSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwnerOrStaff]
 
 
 class DestroySelectionView(generics.DestroyAPIView):
     queryset = Selection
     serializer_class = DestroySelectionSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwnerOrStaff]
