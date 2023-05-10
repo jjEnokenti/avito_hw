@@ -9,6 +9,8 @@
             "password": "gZvptL",
             "role": "member",
             "age": "21",
+            "birth_date": "2010-11-11",
+            "email": "skypro1@mail.ru",
             "locations": [
                 "1"
             ]
@@ -24,6 +26,8 @@
             "password": "4fVqL2",
             "role": "moderator",
             "age": "24",
+            "birth_date": "2010-11-11",
+            "email": "skypro2@mail.ru",
             "locations": [
                 "3"
             ]
@@ -39,6 +43,8 @@
             "password": "o535pj",
             "role": "admin",
             "age": "29",
+            "birth_date": "2010-11-11",
+            "email": "skypro3@mail.ru",
             "locations": [
                 "8"
             ]
@@ -54,6 +60,8 @@
             "password": "d49rSO",
             "role": "moderator",
             "age": "19",
+            "birth_date": "2010-11-11",
+            "email": "skypro4@mail.ru",
             "locations": [
                 "10"
             ]
@@ -69,6 +77,8 @@
             "password": "wCqlVE",
             "role": "member",
             "age": "41",
+            "birth_date": "2010-11-11",
+            "email": "skypro5@mail.ru",
             "locations": [
                 "2"
             ]
@@ -84,6 +94,8 @@
             "password": "xuR2jf",
             "role": "member",
             "age": "37",
+            "birth_date": "2010-11-11",
+            "email": "skypro6@mail.ru",
             "locations": [
                 "4"
             ]
@@ -99,6 +111,8 @@
             "password": "gzP4vR",
             "role": "member",
             "age": "26",
+            "birth_date": "2010-11-11",
+            "email": "skypro7@mail.ru",
             "locations": [
                 "7"
             ]
@@ -114,6 +128,8 @@
             "password": "zo0rj6",
             "role": "member",
             "age": "24",
+            "birth_date": "2010-11-11",
+            "email": "skypro8@mail.ru",
             "locations": [
                 "5"
             ]
@@ -129,6 +145,8 @@
             "password": "daMocL",
             "role": "moderator",
             "age": "22",
+            "birth_date": "2010-11-11",
+            "email": "skypro9@mail.ru",
             "locations": [
                 "9"
             ]
@@ -144,6 +162,8 @@
             "password": "sasha123456",
             "role": "member",
             "age": "35",
+            "birth_date": "2010-11-11",
+            "email": "skypro10@mail.ru",
             "locations": [
                 "6"
             ]

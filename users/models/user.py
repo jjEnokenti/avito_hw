@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from .location import Location
+from ..validators import age_validation, email_validation
 
 
 class User(AbstractUser):
@@ -14,7 +15,9 @@ class User(AbstractUser):
         (ADMIN, 'Админ')
     ]
 
+    email = models.EmailField(unique=True, validators=[email_validation])
     role = models.CharField(max_length=9, choices=ROLES, default=MEMBER)
+    birth_date = models.DateField(validators=[age_validation])
     age = models.PositiveIntegerField(null=True, blank=True)
     locations = models.ManyToManyField(Location)
 

@@ -38,7 +38,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(**validated_data)
-
+        user.set_password(validated_data['password'])
+        user.save()
         if self._locations:
             for location in self._locations:
                 loc_obj, _ = Location.objects.get_or_create(name=location)
@@ -66,11 +67,15 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def is_valid(self, *, raise_exception=False):
         self._locations = self.initial_data.get('locations', [])
+        self._password_init = self.initial_data.get('password', None)
         return super().is_valid(raise_exception=raise_exception)
 
     def save(self):
         user = super().save()
 
+        if self._password_init:
+            user.set_password(self._password_init)
+            user.save()
         if self._locations:
             for location in self._locations:
                 loc_obj, _ = Location.objects.get_or_create(name=location)

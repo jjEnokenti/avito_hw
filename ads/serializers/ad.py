@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ads.models import Ad
+from ads.validators import is_published_cant_be_true
 from users.serializers.user import UserAdSerializer
 
 
@@ -34,6 +35,7 @@ class AdSerializer(serializers.ModelSerializer):
 class AdCreateSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
     id = serializers.IntegerField(required=False)
+    is_published = serializers.BooleanField(default=False, validators=[is_published_cant_be_true])
 
     class Meta:
         model = Ad

@@ -10,7 +10,12 @@ def csv_to_json(csv_path, json_path, model):
 
         for row in cvs_reader:
             raw_data = {'model': model, 'pk': int(row['id'] if 'id' in row else row['Id'])}
+            if model == 'users.user':
+                row['birth_date'] = '2010-11-11'
+                row['email'] = f'skypro{raw_data["pk"]}@mail.ru'
 
+            if model == 'ads.category':
+                row['slug'] = f'{model.split(".")[1]}{raw_data["pk"]}'
             if 'id' in row:
                 del row['id']
             else:

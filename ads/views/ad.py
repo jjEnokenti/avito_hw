@@ -3,8 +3,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from ads.custom_permissions import CanEditOrDelete
-from ads.filter_class import AdFilter
+from ads.permissions import CanEditOrDelete
+from ads.filters import AdFilter
 from ads.models import Ad
 from ads.serializers.ad import (
     AdSerializer,
