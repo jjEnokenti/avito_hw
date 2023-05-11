@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from .location import Location
-from ..validators import age_validation, email_validation
+from users.models.validators import age_validation, email_validation
 
 
 class User(AbstractUser):

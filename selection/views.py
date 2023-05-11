@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from selection.custom_permissions import IsOwnerOrStaff
+from selection.permissions import IsOwnerOrStaff
 from selection.models import Selection
 from selection.serializers import (
     ListSelectionSerializer,
