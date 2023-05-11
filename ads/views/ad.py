@@ -31,6 +31,7 @@ class AdViewSet(viewsets.ModelViewSet):
     default_permission = [IsAuthenticated, CanEditOrDelete]
     permissions = {
         'list': [],
+        'retrieve': [IsAuthenticated],
         "create": [IsAuthenticated]
     }
 
