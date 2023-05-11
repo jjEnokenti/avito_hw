@@ -14,7 +14,7 @@ def auth_token(client, django_user_model):
         password=password,
         email=email,
         birth_date=birth_date,
-        role='admin'
+        is_staff=True
     )
 
     response = client.post(

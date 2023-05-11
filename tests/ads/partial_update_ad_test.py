@@ -6,16 +6,13 @@ from ads.serializers.ad import AdSerializer
 @pytest.mark.django_db
 def test_update_ad(client, category, user, ad, auth_token):
     data = {
-        'name': 'updated_name',
-        'author': user.pk,
-        'price': 999999,
-        'category': category.pk,
+        'name': 'partial updated name',
         'is_published': True
     }
 
     matching_data = AdSerializer(ad).data
 
-    response = client.put(
+    response = client.patch(
         f'/ad/{ad.pk}/',
         data=data,
         HTTP_AUTHORIZATION=auth_token,
@@ -24,9 +21,9 @@ def test_update_ad(client, category, user, ad, auth_token):
 
     expected_response = {
         'id': ad.pk,
-        'name': 'updated_name',
+        'name': 'partial updated name',
         'author': user.pk,
-        'price': 999999,
+        'price': 1000,
         'description': '',
         'image': None,
         'is_published': True,

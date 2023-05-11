@@ -5,12 +5,6 @@ from ads.serializers.validators import IsPublishedNotTrue
 from users.serializers.user import UserAdSerializer
 
 
-class AdSelectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ad
-        fields = '__all__'
-
-
 class AdSerializer(serializers.ModelSerializer):
     author = UserAdSerializer()
     category = serializers.SlugRelatedField(
@@ -53,9 +47,16 @@ class AdCreateSerializer(serializers.ModelSerializer):
 
 class AdUpdateSerializer(AdCreateSerializer):
     id = serializers.IntegerField(read_only=True)
+    is_published = serializers.BooleanField(default=False)
 
 
 class AdDestroySerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
         fields = ('id',)
+
+
+class AdSelectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = '__all__'
